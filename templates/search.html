@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{query}}</title>
+    <link rel="stylesheet" href="{{url_for('static',filename = 'styles/templates.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename = 'styles/search.css')}}">
+</head>
+<body> 
+    <img src="{{url_for('static',filename='imgs/BOOBLE_SF_green.png')}}" id="logo" alt="">
+        <form action="/search" id="search_form" method="post" name="query_form">
+        <input name="query" type="text" >
+        <button type="submit">Search </button>
+    </form>
+    <ul class="results">
+        {% for result in results %}
+            <li class="result" >
+                <form name="res" action="/acess/{{result.id}}" method="get"> </form>
+                <h1  type="submit" class="title">{{result.title}}</h1>
+                <h2 class="description">{{result.description}}</h2>
+                <h3 class="BM25">BM25:{{result.BM25}}</h3>
+
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+<script src="{{url_for('static',filename='scripts/search.js')}}"></script>
+</html>

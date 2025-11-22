@@ -1,0 +1,30 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: rgb(212, 255, 163);
+}
+#search_form{
+    position: absolute;
+
+}
+#search_form>input{
+    position: inherit;
+    border-radius: 5px;
+    border: 1px solid rgb(0, 70, 0);
+    padding-left: 10px;
+
+}
+#search_form>button:hover{
+    background-color: green;
+    cursor: pointer;
+}
+#search_form>button{
+    position: inherit;
+    border-radius: 5px;
+    border: 0px solid rgb(0, 70, 0);
+    background-color: rgb(0, 70, 0);
+    color: aliceblue;
+    font-size: large;
+}

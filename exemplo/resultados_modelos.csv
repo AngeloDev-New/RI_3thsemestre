@@ -1,0 +1,6 @@
+Documento,Produto Escalar (Binário),Produto Escalar (Frequência),Similaridade Cosseno (Freq),Similaridade Cosseno (TF-IDF),BM25
+notícias sobre vestibular unicamp,4,4,1.0,1.0000000000000002,0.3115934875301097
+notícias sobre comida orgânica na unicamp,3,3,0.6123724356957946,0.4375768349568025,0.2933852159805469
+notícias do vestibular Unicamp,3,3,0.75,0.5810122703014768,-0.043913348476465386
+notícias do vestibular Unicamp vestibular 2020,3,4,0.7071067811865475,0.5489816119811357,-0.04079827214497192
+notícias de moradia Unicamp Unicamp Unicamp,2,4,0.5773502691896258,0.35260674584209234,-0.03203087788671177

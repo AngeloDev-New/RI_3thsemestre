@@ -1,0 +1,52 @@
+#logo{
+    position: absolute;
+    width: 10vw;
+    height: 6vw;
+    top: 1vh;
+    left: 2vw;
+}
+#search_form>input{
+    width: 50vw;
+    height: 5vh;
+    top: 4vh;
+    left: 12vw;
+
+}
+#search_form>button{
+    width: 10vw;
+    height: 5vh;
+    top: 4vh;
+    left: 63vw;
+}
+.results{
+    position: absolute;
+    top: 15vh;
+    left: 12vw;
+    cursor: pointer;
+}
+.result{
+    margin-bottom: 20px;
+    background-color: rgb(208, 255, 120);
+    width: 74vw;
+    padding: 15px;
+    border-radius: 10px;
+    list-style: none;
+}
+.title{
+    color: rgb(255, 140, 0);
+    /* background-color:  */
+    /* border-radius: 10px; */
+    font-size: large;
+}
+.BM25{
+    color: brown;
+    font-size: large;
+    position: relative;
+    right: 10px;
+    top: 10px;
+}
+.description{
+    color: green;
+    font-size: small;
+}
+

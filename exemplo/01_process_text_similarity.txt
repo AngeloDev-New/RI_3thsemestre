@@ -1,0 +1,979 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "c7a5fe1d",
+   "metadata": {},
+   "source": [
+    "# Exemplo #1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "648943c6",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Collecting scikit-learn\n",
+      "  Using cached scikit_learn-1.7.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (11 kB)\n",
+      "Collecting rank_bm25\n",
+      "  Downloading rank_bm25-0.2.2-py3-none-any.whl.metadata (3.2 kB)\n",
+      "Collecting pandas\n",
+      "  Downloading pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (91 kB)\n",
+      "\u001b[2K     \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m91.2/91.2 kB\u001b[0m \u001b[31m1.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m31m993.1 kB/s\u001b[0m eta \u001b[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hCollecting nltk\n",
+      "  Downloading nltk-3.9.2-py3-none-any.whl.metadata (3.2 kB)\n",
+      "Collecting spacy\n",
+      "  Downloading spacy-3.8.11-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (27 kB)\n",
+      "Collecting numpy>=1.22.0 (from scikit-learn)\n",
+      "  Using cached numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)\n",
+      "Collecting scipy>=1.8.0 (from scikit-learn)\n",
+      "  Using cached scipy-1.16.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (62 kB)\n",
+      "Collecting joblib>=1.2.0 (from scikit-learn)\n",
+      "  Using cached joblib-1.5.2-py3-none-any.whl.metadata (5.6 kB)\n",
+      "Collecting threadpoolctl>=3.1.0 (from scikit-learn)\n",
+      "  Using cached threadpoolctl-3.6.0-py3-none-any.whl.metadata (13 kB)\n",
+      "Requirement already satisfied: python-dateutil>=2.8.2 in /home/angelo/Documentos/RI_3thsemestre/.venv/lib/python3.12/site-packages (from pandas) (2.9.0.post0)\n",
+      "Collecting pytz>=2020.1 (from pandas)\n",
+      "  Using cached pytz-2025.2-py2.py3-none-any.whl.metadata (22 kB)\n",
+      "Collecting tzdata>=2022.7 (from pandas)\n",
+      "  Using cached tzdata-2025.2-py2.py3-none-any.whl.metadata (1.4 kB)\n",
+      "Collecting click (from nltk)\n",
+      "  Using cached click-8.3.1-py3-none-any.whl.metadata (2.6 kB)\n",
+      "Collecting regex>=2021.8.3 (from nltk)\n",
+      "  Using cached regex-2025.11.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)\n",
+      "Collecting tqdm (from nltk)\n",
+      "  Using cached tqdm-4.67.1-py3-none-any.whl.metadata (57 kB)\n",
+      "Collecting spacy-legacy<3.1.0,>=3.0.11 (from spacy)\n",
+      "  Downloading spacy_legacy-3.0.12-py2.py3-none-any.whl.metadata (2.8 kB)\n",
+      "Collecting spacy-loggers<2.0.0,>=1.0.0 (from spacy)\n",
+      "  Downloading spacy_loggers-1.0.5-py3-none-any.whl.metadata (23 kB)\n",
+      "Collecting murmurhash<1.1.0,>=0.28.0 (from spacy)\n",
+      "  Downloading murmurhash-1.0.15-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl.metadata (2.3 kB)\n",
+      "Collecting cymem<2.1.0,>=2.0.2 (from spacy)\n",
+      "  Downloading cymem-2.0.13-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (9.7 kB)\n",
+      "Collecting preshed<3.1.0,>=3.0.2 (from spacy)\n",
+      "  Downloading preshed-3.0.12-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl.metadata (2.5 kB)\n",
+      "Collecting thinc<8.4.0,>=8.3.4 (from spacy)\n",
+      "  Downloading thinc-8.3.10-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (15 kB)\n",
+      "Collecting wasabi<1.2.0,>=0.9.1 (from spacy)\n",
+      "  Downloading wasabi-1.1.3-py3-none-any.whl.metadata (28 kB)\n",
+      "Collecting srsly<3.0.0,>=2.4.3 (from spacy)\n",
+      "  Downloading srsly-2.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (19 kB)\n",
+      "Collecting catalogue<2.1.0,>=2.0.6 (from spacy)\n",
+      "  Downloading catalogue-2.0.10-py3-none-any.whl.metadata (14 kB)\n",
+      "Collecting weasel<0.5.0,>=0.4.2 (from spacy)\n",
+      "  Downloading weasel-0.4.3-py3-none-any.whl.metadata (4.6 kB)\n",
+      "Collecting typer-slim<1.0.0,>=0.3.0 (from spacy)\n",
+      "  Downloading typer_slim-0.20.0-py3-none-any.whl.metadata (16 kB)\n",
+      "Collecting requests<3.0.0,>=2.13.0 (from spacy)\n",
+      "  Using cached requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)\n",
+      "Collecting pydantic!=1.8,!=1.8.1,<3.0.0,>=1.7.4 (from spacy)\n",
+      "  Downloading pydantic-2.12.4-py3-none-any.whl.metadata (89 kB)\n",
+      "\u001b[2K     \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m89.9/89.9 kB\u001b[0m \u001b[31m2.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+      "\u001b[?25hCollecting jinja2 (from spacy)\n",
+      "  Using cached jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)\n",
+      "Collecting setuptools (from spacy)\n",
+      "  Using cached setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)\n",
+      "Requirement already satisfied: packaging>=20.0 in /home/angelo/Documentos/RI_3thsemestre/.venv/lib/python3.12/site-packages (from spacy) (25.0)\n",
+      "Collecting annotated-types>=0.6.0 (from pydantic!=1.8,!=1.8.1,<3.0.0,>=1.7.4->spacy)\n",
+      "  Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)\n",
+      "Collecting pydantic-core==2.41.5 (from pydantic!=1.8,!=1.8.1,<3.0.0,>=1.7.4->spacy)\n",
+      "  Downloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)\n",
+      "Collecting typing-extensions>=4.14.1 (from pydantic!=1.8,!=1.8.1,<3.0.0,>=1.7.4->spacy)\n",
+      "  Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)\n",
+      "Collecting typing-inspection>=0.4.2 (from pydantic!=1.8,!=1.8.1,<3.0.0,>=1.7.4->spacy)\n",
+      "  Downloading typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)\n",
+      "Requirement already satisfied: six>=1.5 in /home/angelo/Documentos/RI_3thsemestre/.venv/lib/python3.12/site-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)\n",
+      "Collecting charset_normalizer<4,>=2 (from requests<3.0.0,>=2.13.0->spacy)\n",
+      "  Using cached charset_normalizer-3.4.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)\n",
+      "Collecting idna<4,>=2.5 (from requests<3.0.0,>=2.13.0->spacy)\n",
+      "  Using cached idna-3.11-py3-none-any.whl.metadata (8.4 kB)\n",
+      "Collecting urllib3<3,>=1.21.1 (from requests<3.0.0,>=2.13.0->spacy)\n",
+      "  Using cached urllib3-2.5.0-py3-none-any.whl.metadata (6.5 kB)\n",
+      "Collecting certifi>=2017.4.17 (from requests<3.0.0,>=2.13.0->spacy)\n",
+      "  Using cached certifi-2025.11.12-py3-none-any.whl.metadata (2.5 kB)\n",
+      "Collecting blis<1.4.0,>=1.3.0 (from thinc<8.4.0,>=8.3.4->spacy)\n",
+      "  Downloading blis-1.3.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (7.5 kB)\n",
+      "Collecting confection<1.0.0,>=0.0.1 (from thinc<8.4.0,>=8.3.4->spacy)\n",
+      "  Downloading confection-0.1.5-py3-none-any.whl.metadata (19 kB)\n",
+      "Collecting cloudpathlib<1.0.0,>=0.7.0 (from weasel<0.5.0,>=0.4.2->spacy)\n",
+      "  Downloading cloudpathlib-0.23.0-py3-none-any.whl.metadata (16 kB)\n",
+      "Collecting smart-open<8.0.0,>=5.2.1 (from weasel<0.5.0,>=0.4.2->spacy)\n",
+      "  Downloading smart_open-7.5.0-py3-none-any.whl.metadata (24 kB)\n",
+      "Collecting MarkupSafe>=2.0 (from jinja2->spacy)\n",
+      "  Using cached markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)\n",
+      "Collecting wrapt (from smart-open<8.0.0,>=5.2.1->weasel<0.5.0,>=0.4.2->spacy)\n",
+      "  Using cached wrapt-2.0.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (9.0 kB)\n",
+      "Using cached scikit_learn-1.7.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (9.5 MB)\n",
+      "Downloading rank_bm25-0.2.2-py3-none-any.whl (8.6 kB)\n",
+      "Downloading pandas-2.3.3-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.4 MB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m12.4/12.4 MB\u001b[0m \u001b[31m2.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hDownloading nltk-3.9.2-py3-none-any.whl (1.5 MB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.5/1.5 MB\u001b[0m \u001b[31m4.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hDownloading spacy-3.8.11-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (33.2 MB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m33.2/33.2 MB\u001b[0m \u001b[31m4.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hDownloading catalogue-2.0.10-py3-none-any.whl (17 kB)\n",
+      "Downloading cymem-2.0.13-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (260 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m260.8/260.8 kB\u001b[0m \u001b[31m2.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m[36m0:00:01\u001b[0mm eta \u001b[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hUsing cached joblib-1.5.2-py3-none-any.whl (308 kB)\n",
+      "Downloading murmurhash-1.0.15-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl (134 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m134.1/134.1 kB\u001b[0m \u001b[31m3.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+      "\u001b[?25hUsing cached numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)\n",
+      "Downloading preshed-3.0.12-cp312-cp312-manylinux1_x86_64.manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_5_x86_64.whl (874 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m875.0/875.0 kB\u001b[0m \u001b[31m4.0 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m0:01\u001b[0m:01\u001b[0m\n",
+      "\u001b[?25hDownloading pydantic-2.12.4-py3-none-any.whl (463 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m463.4/463.4 kB\u001b[0m \u001b[31m3.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m0:01\u001b[0m:01\u001b[0m\n",
+      "\u001b[?25hDownloading pydantic_core-2.41.5-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m2.1/2.1 MB\u001b[0m \u001b[31m4.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hUsing cached pytz-2025.2-py2.py3-none-any.whl (509 kB)\n",
+      "Using cached regex-2025.11.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (803 kB)\n",
+      "Using cached requests-2.32.5-py3-none-any.whl (64 kB)\n",
+      "Using cached scipy-1.16.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (35.7 MB)\n",
+      "Downloading spacy_legacy-3.0.12-py2.py3-none-any.whl (29 kB)\n",
+      "Downloading spacy_loggers-1.0.5-py3-none-any.whl (22 kB)\n",
+      "Downloading srsly-2.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.2/1.2 MB\u001b[0m \u001b[31m4.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hDownloading thinc-8.3.10-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (3.9 MB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m3.9/3.9 MB\u001b[0m \u001b[31m3.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hUsing cached threadpoolctl-3.6.0-py3-none-any.whl (18 kB)\n",
+      "Using cached tqdm-4.67.1-py3-none-any.whl (78 kB)\n",
+      "Downloading typer_slim-0.20.0-py3-none-any.whl (47 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m47.1/47.1 kB\u001b[0m \u001b[31m3.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+      "\u001b[?25hUsing cached click-8.3.1-py3-none-any.whl (108 kB)\n",
+      "Using cached tzdata-2025.2-py2.py3-none-any.whl (347 kB)\n",
+      "Downloading wasabi-1.1.3-py3-none-any.whl (27 kB)\n",
+      "Downloading weasel-0.4.3-py3-none-any.whl (50 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m50.8/50.8 kB\u001b[0m \u001b[31m3.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+      "\u001b[?25hUsing cached jinja2-3.1.6-py3-none-any.whl (134 kB)\n",
+      "Using cached setuptools-80.9.0-py3-none-any.whl (1.2 MB)\n",
+      "Using cached annotated_types-0.7.0-py3-none-any.whl (13 kB)\n",
+      "Downloading blis-1.3.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (11.4 MB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m11.4/11.4 MB\u001b[0m \u001b[31m4.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m0:01\u001b[0m:01\u001b[0m\n",
+      "\u001b[?25hUsing cached certifi-2025.11.12-py3-none-any.whl (159 kB)\n",
+      "Using cached charset_normalizer-3.4.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (153 kB)\n",
+      "Downloading cloudpathlib-0.23.0-py3-none-any.whl (62 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m62.8/62.8 kB\u001b[0m \u001b[31m2.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+      "\u001b[?25hDownloading confection-0.1.5-py3-none-any.whl (35 kB)\n",
+      "Using cached idna-3.11-py3-none-any.whl (71 kB)\n",
+      "Using cached markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)\n",
+      "Downloading smart_open-7.5.0-py3-none-any.whl (63 kB)\n",
+      "\u001b[2K   \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m63.9/63.9 kB\u001b[0m \u001b[31m827.9 kB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mB/s\u001b[0m eta \u001b[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hUsing cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)\n",
+      "Downloading typing_inspection-0.4.2-py3-none-any.whl (14 kB)\n",
+      "Using cached urllib3-2.5.0-py3-none-any.whl (129 kB)\n",
+      "Using cached wrapt-2.0.1-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (121 kB)\n",
+      "Installing collected packages: pytz, wrapt, wasabi, urllib3, tzdata, typing-extensions, tqdm, threadpoolctl, spacy-loggers, spacy-legacy, setuptools, regex, numpy, murmurhash, MarkupSafe, joblib, idna, cymem, cloudpathlib, click, charset_normalizer, certifi, catalogue, annotated-types, typing-inspection, typer-slim, srsly, smart-open, scipy, requests, rank_bm25, pydantic-core, preshed, pandas, nltk, jinja2, blis, scikit-learn, pydantic, confection, weasel, thinc, spacy\n",
+      "Successfully installed MarkupSafe-3.0.3 annotated-types-0.7.0 blis-1.3.3 catalogue-2.0.10 certifi-2025.11.12 charset_normalizer-3.4.4 click-8.3.1 cloudpathlib-0.23.0 confection-0.1.5 cymem-2.0.13 idna-3.11 jinja2-3.1.6 joblib-1.5.2 murmurhash-1.0.15 nltk-3.9.2 numpy-2.3.5 pandas-2.3.3 preshed-3.0.12 pydantic-2.12.4 pydantic-core-2.41.5 pytz-2025.2 rank_bm25-0.2.2 regex-2025.11.3 requests-2.32.5 scikit-learn-1.7.2 scipy-1.16.3 setuptools-80.9.0 smart-open-7.5.0 spacy-3.8.11 spacy-legacy-3.0.12 spacy-loggers-1.0.5 srsly-2.5.2 thinc-8.3.10 threadpoolctl-3.6.0 tqdm-4.67.1 typer-slim-0.20.0 typing-extensions-4.15.0 typing-inspection-0.4.2 tzdata-2025.2 urllib3-2.5.0 wasabi-1.1.3 weasel-0.4.3 wrapt-2.0.1\n",
+      "Note: you may need to restart the kernel to use updated packages.\n"
+     ]
+    }
+   ],
+   "source": [
+    "%pip install scikit-learn rank_bm25 pandas nltk spacy"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "bc06f74d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer\n",
+    "from sklearn.metrics.pairwise import cosine_similarity\n",
+    "from rank_bm25 import BM25Okapi\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import nltk\n",
+    "from nltk.corpus import stopwords\n",
+    "from nltk.tokenize import RegexpTokenizer\n",
+    "import string"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "1cf0a62a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "[nltk_data] Downloading package punkt to /home/angelo/nltk_data...\n",
+      "[nltk_data]   Unzipping tokenizers/punkt.zip.\n",
+      "[nltk_data] Downloading package stopwords to /home/angelo/nltk_data...\n",
+      "[nltk_data]   Unzipping corpora/stopwords.zip.\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Baixar recursos necessários do nltk\n",
+    "nltk.download('punkt')\n",
+    "nltk.download('stopwords')\n",
+    "\n",
+    "# Documentos do exemplo dos slides (simplificados para português)\n",
+    "docs = [\n",
+    "    \"notícias sobre vestibular unicamp\",\n",
+    "    \"notícias sobre comida orgânica na unicamp\",\n",
+    "    \"notícias do vestibular Unicamp\",\n",
+    "    \"notícias do vestibular Unicamp vestibular 2020\",\n",
+    "    \"notícias de moradia Unicamp Unicamp Unicamp\"\n",
+    "]\n",
+    "\n",
+    "query = \"notícias sobre vestibular unicamp\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "f7cca587",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['notícias', 'sobre', 'vestibular', 'unicamp']"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Pré-processamento de texto\n",
+    "def preprocess(text):\n",
+    "    text = text.lower()\n",
+    "    tokenizer = RegexpTokenizer(r'\\w+')\n",
+    "    tokens = tokenizer.tokenize(text)\n",
+    "    stop_words = set(stopwords.words('portuguese'))\n",
+    "    #print(stop_words)\n",
+    "    tokens = [t for t in tokens if t not in stop_words]\n",
+    "    return tokens\n",
+    "\n",
+    "docs_tokens = [preprocess(doc) for doc in docs]\n",
+    "query_tokens = preprocess(query)\n",
+    "\n",
+    "query_tokens"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "24f86a96",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<Compressed Sparse Row sparse matrix of dtype 'int64'\n",
+       "\twith 4 stored elements and shape (1, 11)>"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Matriz termo-documento binária\n",
+    "count_vect = CountVectorizer(binary=True)\n",
+    "X_bin = count_vect.fit_transform(docs)\n",
+    "query_vec_bin = count_vect.transform([query])\n",
+    "query_vec_bin"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "2a45cb3f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>2020</th>\n",
+       "      <th>comida</th>\n",
+       "      <th>de</th>\n",
+       "      <th>do</th>\n",
+       "      <th>moradia</th>\n",
+       "      <th>na</th>\n",
+       "      <th>notícias</th>\n",
+       "      <th>orgânica</th>\n",
+       "      <th>sobre</th>\n",
+       "      <th>unicamp</th>\n",
+       "      <th>vestibular</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   2020  comida  de  do  moradia  na  notícias  orgânica  sobre  unicamp  \\\n",
+       "0     0       0   0   0        0   0         1         0      1        1   \n",
+       "\n",
+       "   vestibular  \n",
+       "0           1  "
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pd.DataFrame(\n",
+    "    query_vec_bin.toarray(),\n",
+    "    #X_bin.toarray(),\n",
+    "    columns=count_vect.get_feature_names_out()\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "be9bf404",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "notícias sobre vestibular unicamp\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>2020</th>\n",
+       "      <th>comida</th>\n",
+       "      <th>de</th>\n",
+       "      <th>do</th>\n",
+       "      <th>moradia</th>\n",
+       "      <th>na</th>\n",
+       "      <th>notícias</th>\n",
+       "      <th>orgânica</th>\n",
+       "      <th>sobre</th>\n",
+       "      <th>unicamp</th>\n",
+       "      <th>vestibular</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   2020  comida  de  do  moradia  na  notícias  orgânica  sobre  unicamp  \\\n",
+       "0     0       0   0   0        0   0         1         0      1        1   \n",
+       "\n",
+       "   vestibular  \n",
+       "0           1  "
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# 2. Matriz termo-documento com frequência\n",
+    "count_vect_freq = CountVectorizer(binary=False)\n",
+    "X_freq = count_vect_freq.fit_transform(docs)\n",
+    "#query = \"notícias sobre vestibular unicamp\"\n",
+    "print(query)\n",
+    "query_vec_freq = count_vect_freq.transform([query])\n",
+    "\n",
+    "pd.DataFrame(\n",
+    "    query_vec_freq.toarray(),\n",
+    "    columns=count_vect.get_feature_names_out()\n",
+    ")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "87b9128e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['notícias sobre vestibular unicamp', 'notícias sobre comida orgânica na unicamp', 'notícias do vestibular Unicamp', 'notícias do vestibular Unicamp vestibular 2020', 'notícias de moradia Unicamp Unicamp Unicamp']\n",
+      "# Docs: 5\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "array([[1.        , 0.61237244, 0.75      , 0.70710678, 0.57735027]])"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Similaridade cosseno com frequência\n",
+    "cosine_sim = cosine_similarity(query_vec_freq, X_freq)\n",
+    "# No. de elementos em cosine_sim representa no. de documentos\n",
+    "print(docs)\n",
+    "print(f\"# Docs: {len(docs)}\")\n",
+    "\n",
+    "cosine_sim\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "ee36ef10",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[1.        , 0.43757683, 0.58101227, 0.54898161, 0.35260675]])"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# TF-IDF\n",
+    "tfidf_vect = TfidfVectorizer()\n",
+    "X_tfidf = tfidf_vect.fit_transform(docs)\n",
+    "query_vec_tfidf = tfidf_vect.transform([query])\n",
+    "cosine_sim_tfidf = cosine_similarity(query_vec_tfidf, X_tfidf)\n",
+    "cosine_sim_tfidf"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "271e1d3e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([ 0.31159349,  0.29338522, -0.04391335, -0.04079827, -0.03203088])"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# BM25\n",
+    "bm25 = BM25Okapi(docs_tokens)\n",
+    "bm25_scores = bm25.get_scores(query_tokens)\n",
+    "bm25_scores"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "59387a58",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Documento</th>\n",
+       "      <th>Produto Escalar (Binário)</th>\n",
+       "      <th>Produto Escalar (Frequência)</th>\n",
+       "      <th>Similaridade Cosseno (Freq)</th>\n",
+       "      <th>Similaridade Cosseno (TF-IDF)</th>\n",
+       "      <th>BM25</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>notícias sobre vestibular unicamp</td>\n",
+       "      <td>4</td>\n",
+       "      <td>4</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>1.000000</td>\n",
+       "      <td>0.311593</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>notícias sobre comida orgânica na unicamp</td>\n",
+       "      <td>3</td>\n",
+       "      <td>3</td>\n",
+       "      <td>0.612372</td>\n",
+       "      <td>0.437577</td>\n",
+       "      <td>0.293385</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>notícias do vestibular Unicamp</td>\n",
+       "      <td>3</td>\n",
+       "      <td>3</td>\n",
+       "      <td>0.750000</td>\n",
+       "      <td>0.581012</td>\n",
+       "      <td>-0.043913</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>notícias do vestibular Unicamp vestibular 2020</td>\n",
+       "      <td>3</td>\n",
+       "      <td>4</td>\n",
+       "      <td>0.707107</td>\n",
+       "      <td>0.548982</td>\n",
+       "      <td>-0.040798</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>notícias de moradia Unicamp Unicamp Unicamp</td>\n",
+       "      <td>2</td>\n",
+       "      <td>4</td>\n",
+       "      <td>0.577350</td>\n",
+       "      <td>0.352607</td>\n",
+       "      <td>-0.032031</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                        Documento  Produto Escalar (Binário)  \\\n",
+       "0               notícias sobre vestibular unicamp                          4   \n",
+       "1       notícias sobre comida orgânica na unicamp                          3   \n",
+       "2                  notícias do vestibular Unicamp                          3   \n",
+       "3  notícias do vestibular Unicamp vestibular 2020                          3   \n",
+       "4     notícias de moradia Unicamp Unicamp Unicamp                          2   \n",
+       "\n",
+       "   Produto Escalar (Frequência)  Similaridade Cosseno (Freq)  \\\n",
+       "0                             4                     1.000000   \n",
+       "1                             3                     0.612372   \n",
+       "2                             3                     0.750000   \n",
+       "3                             4                     0.707107   \n",
+       "4                             4                     0.577350   \n",
+       "\n",
+       "   Similaridade Cosseno (TF-IDF)      BM25  \n",
+       "0                       1.000000  0.311593  \n",
+       "1                       0.437577  0.293385  \n",
+       "2                       0.581012 -0.043913  \n",
+       "3                       0.548982 -0.040798  \n",
+       "4                       0.352607 -0.032031  "
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Organização dos resultados em DataFrame\n",
+    "df_resultado = pd.DataFrame({\n",
+    "    \"Documento\"                     : docs,\n",
+    "    \"Produto Escalar (Binário)\"     : (query_vec_bin @ X_bin.T).toarray()[0],\n",
+    "    \"Produto Escalar (Frequência)\"  : (query_vec_freq @ X_freq.T).toarray()[0],\n",
+    "    \"Similaridade Cosseno (Freq)\"   : cosine_sim.flatten(),\n",
+    "    \"Similaridade Cosseno (TF-IDF)\" : cosine_sim_tfidf.flatten(),\n",
+    "    \"BM25\"                          : bm25_scores\n",
+    "})\n",
+    "\n",
+    "df_resultado"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "ca20d635",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (Opcional) Salvar em CSV\n",
+    "df_resultado.to_csv(\"resultados_modelos.csv\", index=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bc9ee6a6",
+   "metadata": {},
+   "source": [
+    "# Exemplo #2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "58de538e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import nltk\n",
+    "import unicodedata\n",
+    "import string\n",
+    "import spacy\n",
+    "\n",
+    "from nltk.corpus import stopwords\n",
+    "from nltk.tokenize import word_tokenize\n",
+    "from nltk.stem import RSLPStemmer"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "84bf15d1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "[nltk_data] Downloading package punkt to /home/angelo/nltk_data...\n",
+      "[nltk_data]   Package punkt is already up-to-date!\n",
+      "[nltk_data] Downloading package stopwords to /home/angelo/nltk_data...\n",
+      "[nltk_data]   Package stopwords is already up-to-date!\n",
+      "[nltk_data] Downloading package rslp to /home/angelo/nltk_data...\n",
+      "[nltk_data]   Unzipping stemmers/rslp.zip.\n",
+      "[nltk_data] Downloading package punkt_tab to /home/angelo/nltk_data...\n",
+      "[nltk_data]   Unzipping tokenizers/punkt_tab.zip.\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "True"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Baixando os recursos do NLTK (somente na primeira vez)\n",
+    "\n",
+    "nltk.download('punkt')      # Tokenização\n",
+    "nltk.download('stopwords')  # Lista de stopwords\n",
+    "nltk.download('rslp')       # Stemmer para português\n",
+    "nltk.download('punkt_tab')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "40abd540",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Texto de exemplo (público, simula uma notícia)\n",
+    "texto = \"\"\"\n",
+    "A inteligência artificial tem ganhado cada vez mais espaço no mercado de trabalho,\n",
+    "impulsionando mudanças em diversos setores. Especialistas apontam que áreas como saúde,\n",
+    "finanças e educação são algumas das mais impactadas. Apesar dos avanços,\n",
+    "o uso ético da tecnologia ainda é um desafio.\n",
+    "\"\"\"\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "d1bb6a1e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " Texto após normalização:\n",
+      " \n",
+      "a inteligencia artificial tem ganhado cada vez mais espaco no mercado de trabalho\n",
+      "impulsionando mudancas em diversos setores especialistas apontam que areas como saude\n",
+      "financas e educacao sao algumas das mais impactadas apesar dos avancos\n",
+      "o uso etico da tecnologia ainda e um desafio\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "#  ETAPA 1: Normalização do texto\n",
+    "# - Tudo em minúsculas\n",
+    "# - Remoção de acentos\n",
+    "# - Remoção de pontuação\n",
+    "\n",
+    "def normalizar(texto):\n",
+    "    texto = texto.lower()                        # Converter para minúsculas\n",
+    "    texto = unicodedata.normalize('NFD', texto)  # Quebrar caracteres acentuados\n",
+    "    texto = ''.join(c for c in texto if unicodedata.category(c) != 'Mn')  # Remover acentos\n",
+    "    texto = texto.translate(str.maketrans('', '', string.punctuation))    # Remover pontuação\n",
+    "    return texto\n",
+    "\n",
+    "texto_normalizado = normalizar(texto)\n",
+    "\n",
+    "print(\" Texto após normalização:\\n\", texto_normalizado)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "29cfcc58",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      " Tokens extraídos do texto:\n",
+      " ['a', 'inteligencia', 'artificial', 'tem', 'ganhado', 'cada', 'vez', 'mais', 'espaco', 'no', 'mercado', 'de', 'trabalho', 'impulsionando', 'mudancas', 'em', 'diversos', 'setores', 'especialistas', 'apontam', 'que', 'areas', 'como', 'saude', 'financas', 'e', 'educacao', 'sao', 'algumas', 'das', 'mais', 'impactadas', 'apesar', 'dos', 'avancos', 'o', 'uso', 'etico', 'da', 'tecnologia', 'ainda', 'e', 'um', 'desafio']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# ETAPA 2: Tokenização\n",
+    "# - Separação do texto em palavras (tokens)\n",
+    "tokens = word_tokenize(texto_normalizado)\n",
+    "print(\"\\n Tokens extraídos do texto:\\n\", tokens)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "f583cf36",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Tokens após remoção de stopwords:\n",
+      " ['inteligencia', 'artificial', 'ganhado', 'cada', 'vez', 'espaco', 'mercado', 'trabalho', 'impulsionando', 'mudancas', 'diversos', 'setores', 'especialistas', 'apontam', 'areas', 'saude', 'financas', 'educacao', 'sao', 'algumas', 'impactadas', 'apesar', 'avancos', 'uso', 'etico', 'tecnologia', 'ainda', 'desafio']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# ETAPA 3: Remoção de Stopwords\n",
+    "# - Palavras comuns que não carregam significado importante (ex: a, de, que, etc.)\n",
+    "stopwords_pt = set(stopwords.words('portuguese'))\n",
+    "tokens_sem_stopwords = [t for t in tokens if t not in stopwords_pt]\n",
+    "print(\"\\nTokens após remoção de stopwords:\\n\", tokens_sem_stopwords)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "94bbe4e7",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Tokens após stemming (radicais):\n",
+      " ['inteligenc', 'artific', 'ganh', 'cad', 'vez', 'espac', 'merc', 'trabalh', 'impulsion', 'mudanc', 'divers', 'set', 'especi', 'apont', 'are', 'saud', 'financ', 'educaca', 'sao', 'algum', 'impact', 'apes', 'avanc', 'uso', 'etic', 'tecnolog', 'aind', 'desafi']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# ETAPA 4: Stemming\n",
+    "# - Redução das palavras ao seu radical (ex: ganhado → ganh)\n",
+    "stemmer = RSLPStemmer()\n",
+    "tokens_stemmed = [stemmer.stem(t) for t in tokens_sem_stopwords]\n",
+    "print(\"\\nTokens após stemming (radicais):\\n\", tokens_stemmed)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "307986ce",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Collecting pt-core-news-sm==3.8.0\n",
+      "  Downloading https://github.com/explosion/spacy-models/releases/download/pt_core_news_sm-3.8.0/pt_core_news_sm-3.8.0-py3-none-any.whl (13.0 MB)\n",
+      "\u001b[2K     \u001b[38;2;114;156;31m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m13.0/13.0 MB\u001b[0m \u001b[31m5.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0mm eta \u001b[36m0:00:01\u001b[0m[36m0:00:01\u001b[0m\n",
+      "\u001b[?25hInstalling collected packages: pt-core-news-sm\n",
+      "Successfully installed pt-core-news-sm-3.8.0\n",
+      "\u001b[38;5;2m✔ Download and installation successful\u001b[0m\n",
+      "You can now load the package via spacy.load('pt_core_news_sm')\n"
+     ]
+    }
+   ],
+   "source": [
+    "!spacy download pt_core_news_sm"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "id": "67ba7e68",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Tokens após lematização:\n",
+      " ['inteligencia', 'artificial', 'ganhar', 'cada', 'vez', 'espaco', 'mercado', 'trabalho', 'impulsionar', 'mudanco', 'diverso', 'setor', 'especialista', 'apontar', 'area', 'saude', 'financo', 'educacao', 'sao', 'algum', 'impactar', 'apesar', 'avanco', 'uso', 'etico', 'tecnologia', 'ainda', 'desafio']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# ETAPA 4: Lemmatizacao\n",
+    "\n",
+    "nlp = spacy.load(\"pt_core_news_sm\")\n",
+    "doc = nlp(' '.join(tokens_sem_stopwords))\n",
+    "tokens_lemma = [token.lemma_ for token in doc if token.lemma_ not in stopwords_pt]\n",
+    "print(\"\\nTokens após lematização:\\n\", tokens_lemma)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "77a1cf4f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "Conjunto final de termos representativos\n",
+      " - stemming: {'espac', 'artific', 'trabalh', 'impulsion', 'impact', 'avanc', 'set', 'tecnolog', 'educaca', 'uso', 'desafi', 'vez', 'sao', 'saud', 'etic', 'are', 'apes', 'apont', 'algum', 'cad', 'divers', 'aind', 'mudanc', 'merc', 'ganh', 'inteligenc', 'financ', 'especi'}\n",
+      " - lemma: {'inteligencia', 'impulsionar', 'mercado', 'artificial', 'ainda', 'uso', 'mudanco', 'area', 'vez', 'sao', 'impactar', 'trabalho', 'saude', 'apontar', 'algum', 'desafio', 'cada', 'diverso', 'etico', 'tecnologia', 'especialista', 'apesar', 'espaco', 'avanco', 'financo', 'ganhar', 'setor', 'educacao'}\n"
+     ]
+    }
+   ],
+   "source": [
+    "# ETAPA 5: Conjunto final de termos representativos\n",
+    "# - Lista única com os termos úteis para representar o documento\n",
+    "termos_representativos_stem = set(tokens_stemmed)\n",
+    "termos_representativos_lemma = set(tokens_lemma)\n",
+    "\n",
+    "print(\"\\nConjunto final de termos representativos\")\n",
+    "print(\" - stemming:\", termos_representativos_stem)\n",
+    "print(\" - lemma:\", termos_representativos_lemma)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": ".venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

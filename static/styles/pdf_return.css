@@ -1,0 +1,21 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#file{
+    position: absolute;
+    top: 10vh;
+    left: 10vw;
+    width: 80vw;
+    height: 90vh;
+    border-radius: 10px;
+    
+}
+#title{
+    /* position: absolute; */
+    margin-top: 20px;
+    /* left: 1vw; */
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+}
