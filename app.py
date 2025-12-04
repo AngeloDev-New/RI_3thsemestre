@@ -1,7 +1,7 @@
 from flask import Flask,render_template,request,jsonify,url_for,send_from_directory
 import os
 import uuid
-from utils import preprocess
+from utils import preprocess_Exemplo_1,preprocess_Exemplo_2,preprocess
 from database import corpus
 from Read_files import getPdfContent,readImage
 
@@ -17,28 +17,34 @@ def search():
     query = request.form['query']
     # print(query)
     # buscar dentre os documentos
-    query_tokens = preprocess(query)
+    query_tokens = preprocess_Exemplo_1(query)
     docs_tokens = corpus.tokens()
-    
-    # BM25
-    bm25 = BM25Okapi(docs_tokens)
-    bm25_scores = bm25.get_scores(query_tokens)
+    if docs_tokens:
+            
+        
+        # BM25
+        bm25 = BM25Okapi(docs_tokens)
+        bm25_scores = bm25.get_scores(query_tokens)
 
-    return render_template('search.html',query = query,results = corpus.results(bm25_scores))
-
+        return render_template('search.html',query = query,results = corpus.results(bm25_scores))
+    else:
+        return render_template('search.html',query = query,results = [])
 @app.route('/corpus',methods=['POST','GET'])
 def corpus_page():
     match request.method:
         case 'POST':
             files = request.files.getlist('files')
+            suportados = 0
+            nao_suportados = 0
             for file in files:
                 id = uuid.uuid4().hex
                 filename = file.filename
                 name = f'id_{id}_name_{filename}'
-                file.save(f'corpus/{name}')
+                file_path = f'corpus/{name}'
+                file.save(file_path)
+                file.stream.seek(0)
                 # salvar otimizado
                 tipo = file.content_type
-                file.stream.seek(0)
                 match tipo:
                     case 'application/pdf':
                         content = getPdfContent(file.read())
@@ -52,13 +58,18 @@ def corpus_page():
                         content = file.read().decode("utf-8")
                         corpus.addItem(id,filename,content)
                     case _:
-                        return jsonify({
-                            'erro':'tipo nao suportado '
-                        })
-
+                        os.remove(file_path)
+                        nao_suportados += 1
+                        # return jsonify({
+                        #     'erro':'tipo nao suportado '
+                        # }),405
+            qtd_arquivos = len(files)
+            suportados = qtd_arquivos - nao_suportados
 
             return jsonify({
-                'len':f'{len(files)} recebidos'
+                'len':suportados,
+                'qtd_arquivos':qtd_arquivos,
+                'nao_suportados':nao_suportados
             }),200
 
         case 'GET':

@@ -49,4 +49,11 @@
     color: green;
     font-size: small;
 }
+.parans{
+    position: absolute;
+    left: 12vw;
+    top: 10vh;
+    color: rgb(0, 145, 36);
+    
+}
 

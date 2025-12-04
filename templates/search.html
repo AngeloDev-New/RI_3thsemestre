@@ -13,6 +13,7 @@
         <input name="query" type="text" >
         <button type="submit">Search </button>
     </form>
+    <p class="parans">{{results | length}} resultados devolvido pelo Booble</p>
     <ul class="results">
         {% for result in results %}
             <li class="result" >

@@ -69,10 +69,11 @@
 }
 .corpus_len{
     position: absolute;
-    top: 25vh;
+    top: 15vh;
     left: 30vw;
     color: rgb(0, 70, 0);
     font-size: 5vh;
     
 
 }
+
